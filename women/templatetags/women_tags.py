@@ -1,6 +1,8 @@
 from django import template
 from women.models import *
 from women.views import menu
+
+
 register = template.Library()
 
 
