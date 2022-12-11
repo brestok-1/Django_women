@@ -13,11 +13,6 @@ from .forms import *
 from .models import *
 from .utils import *
 
-menu = [{'title': 'About website', 'url_name': 'about'},
-        {'title': 'Add article', 'url_name': 'addpage'},
-        {'title': 'Feedback', 'url_name': 'contact'},
-        {'title': 'Sign up', 'url_name': 'login'}]
-
 
 class WomenHome(DataMixin, ListView):
     model = Women
@@ -46,16 +41,26 @@ class WomenHome(DataMixin, ListView):
 #
 #     return render(request, 'women/index.html', context=context)
 
-@login_required  # the same as LoginRequiredMixin in classes
-def about(request):
-    contact_list = Women.objects.all()
-    paginator = Paginator(contact_list, 3)
+# @login_required  # the same as LoginRequiredMixin in classes
+# def about(request):
+#     contact_list = Women.objects.all()
+#     paginator = Paginator(contact_list, 3)
+#
+#     page_number = request.GET.get('page')
+#     paje_obj = paginator.get_page(page_number)
+#     cats = Category.objects.annotate(Count('women'))
+#     return render(request, 'women/about.html',
+#                   {"page": paje_obj, 'title': 'About Web page', 'menu': menu, 'cats': cats})
 
-    page_number = request.GET.get('page')
-    paje_obj = paginator.get_page(page_number)
-    cats = Category.objects.annotate(Count('women'))
-    return render(request, 'women/about.html',
-                  {"page": paje_obj, 'title': 'About Web page', 'menu': menu, 'cats': cats})
+
+class AboutPage(DataMixin, ListView):
+    model = AboutModel
+    template_name = 'women/about.html'
+    context_object_name = 'about'
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(AboutPage, self).get_context_data(**kwargs)
+        c_def = self.get_user_context(title='About page')
+        return context | c_def
 
 
 # def addpage(request):
@@ -79,10 +84,6 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         context = super(AddPage, self).get_context_data(**kwargs)
         c_def = self.get_user_context(title='Add article')
         return context | c_def
-
-
-def contact(request):
-    return HttpResponse('feedback')
 
 
 def pageNotFound(request, exception):
@@ -174,3 +175,11 @@ class ContactFormView(DataMixin, FormView):
     form_class = ContactForm
     template_name = 'women/contact.html'
     success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactFormView, self).get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Feedback')
+        return context | c_def
+
+    def form_valid(self, form):
+        return redirect('home')

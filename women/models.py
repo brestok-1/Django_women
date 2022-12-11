@@ -38,3 +38,9 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = "Categorie's"
         ordering = ['id']
+
+
+class AboutModel(models.Model):
+    content = models.TextField()
+    class Meta:
+        verbose_name = verbose_name_plural = 'About me'

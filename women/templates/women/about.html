@@ -2,17 +2,7 @@
 
 {% block content %}
     <h1>{{ title }}</h1>
-    {% for contact in page %}
-        <p>{{ contact }}</p>
+    {% for p in about %}
+        <p>{{ p.content|linebreaks }}</p>
     {% endfor %}
-
-    <nav>
-        <ul>
-            {% for p in page.paginator.page_range %}
-                <li>
-                    <a href="?page={{ p }}">{{ p }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </nav>
 {% endblock %}

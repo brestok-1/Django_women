@@ -6,9 +6,9 @@ from .views import *
 urlpatterns = [
     # path('', cache_page(60)(WomenHome.as_view()), name='home'), if we want o cache defined page
     path('', WomenHome.as_view(), name='home'),
-    path('about/', about, name='about'),
+    path('about/', AboutPage.as_view(), name='about'),
     path('addpage/', AddPage.as_view(), name='addpage'),
-    path('contact/', contact, name='contact'),
+    path('contact/', ContactFormView.as_view(), name='contact'),
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
     path('register/', RegisterUser.as_view(), name='register'),
